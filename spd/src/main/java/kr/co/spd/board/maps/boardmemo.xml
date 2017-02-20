@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="BoardMemo">
+ 
+ <insert id="insertData" parameterType="kr.co.spd.board.dto.BoardMemoDTO">
+	<selectKey order="BEFORE" keyProperty="memoId" resultType="java.lang.Integer">
+ 		SELECT SEQ_BOARD_MEMO.NEXTVAL FROM DUAL
+ 	</selectKey>
+	INSERT INTO TB_BOARD_MEMO(
+  	MEMO_ID, REG_DT, MEMO_CONTENTS, DOC_ID, USER_ID
+  ) VALUES (
+  	#{memoId}, SYSDATE, #{memoContents}, #{docId}, #{userId}
+  )
+ </insert>
+ 
+ <delete id="deleteData" parameterType="java.lang.Integer" >
+  DELETE FROM TB_BOARD_MEMO WHERE MEMO_ID = #{memoId}
+ </delete>
+ 
+ <delete id="deleteByDocId" parameterType="java.lang.Integer" >
+ 	DELETE FROM TB_BOARD_MEMO WHERE DOC_ID = #{docId}
+ </delete>
+ 
+ <select id="selectList" parameterType="java.lang.Integer" resultType="kr.co.spd.board.dto.BoardMemoDTO" >
+	SELECT BM.*
+		,(SELECT NAME FROM TB_USER WHERE USER_ID = BM.USER_ID) AS NAME
+	FROM TB_BOARD_MEMO BM
+	WHERE DOC_ID = #{docId} ORDER BY MEMO_ID ASC
+ </select>
+ 
+ <select id="newMemo" resultType="kr.co.spd.board.dto.BoardMemoDTO" >
+	SELECT 
+	  A.*
+	  ,(SELECT NAME FROM TB_USER WHERE USER_ID = A.USER_ID) AS NAME
+	FROM(
+	  SELECT ROWNUM AS RNUM , BM.*
+	  FROM TB_BOARD_MEMO BM
+	  WHERE ROWNUM <![CDATA[ <= ]]> 6
+	  ORDER BY MEMO_ID DESC
+	) A
+	WHERE RNUM  <![CDATA[ > ]]> 0
+ </select>
+ 
+ 
+
+</mapper>

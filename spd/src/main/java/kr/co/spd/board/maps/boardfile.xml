@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="BoardFile">
+ 	
+ <insert id="insertData" parameterType="kr.co.spd.board.dto.BoardFileDTO">
+  <selectKey order="BEFORE" keyProperty="fileId" resultType="java.lang.Integer">
+ 		SELECT SEQ_BOARD_FILE.NEXTVAL FROM DUAL
+ 	</selectKey>
+	INSERT INTO TB_BOARD_FILE(
+  	FILE_ID, REG_DT, ORG_FILE_NM, NEW_FILE_NM, EXT, FSIZE, FPATH, DOC_ID
+  ) VALUES (
+  	#{fileId}, SYSDATE, #{orgFileNm}, #{newFileNm}, #{ext}, #{fsize}, #{fpath}, #{docId}
+  )
+ </insert>
+ 
+ <delete id="deleteData" parameterType="java.lang.Integer" >
+  DELETE FROM TB_BOARD_FILE WHERE FILE_ID = #{fileId}
+ </delete>
+ 
+ <delete id="deleteDataByDocId" parameterType="java.lang.Integer" >
+  DELETE FROM TB_BOARD_FILE WHERE DOC_ID = #{docId}
+ </delete>
+	
+ <select id="selectList" parameterType="java.lang.Integer" resultType="kr.co.spd.board.dto.BoardFileDTO" >
+	SELECT * 
+	FROM TB_BOARD_FILE
+	WHERE DOC_ID = #{docId}
+ </select>
+ 
+ <select id="selectOne" parameterType="java.lang.Integer" resultType="kr.co.spd.board.dto.BoardFileDTO" >
+	SELECT * 
+	FROM TB_BOARD_FILE
+	WHERE FILE_ID = #{fileId}
+ </select>
+	
+</mapper>

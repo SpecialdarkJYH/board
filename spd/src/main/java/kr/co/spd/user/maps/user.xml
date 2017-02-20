@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="User">
+ 
+ <insert id="insertData" parameterType="kr.co.spd.user.dto.UserDTO">
+	<selectKey order="BEFORE" keyProperty="userId" resultType="java.lang.Integer">
+ 		SELECT SEQ_USER.NEXTVAL FROM DUAL
+ 	</selectKey>
+	INSERT INTO TB_USER(
+  	USER_ID, LGN_ID, LGN_PW, EMAIL, PHONE, NAME, REG_DT, STATUS
+  ) VALUES (
+  	#{userId}, #{lgnId}, #{lgnPw}, #{email}, #{phone}, #{name}, SYSDATE, #{status}
+  )
+ </insert>
+ 
+ <update id="updateData" parameterType="kr.co.spd.user.dto.UserDTO">
+   UPDATE TB_USER
+   SET EMAIL = #{email}
+ 		 , PHONE = #{phone}
+ 		 , NAME = #{name}
+ 		 , STATUS = #{status}
+ 	 WHERE LGN_ID = #{lgnId} AND LGN_PW = #{lgnPw}
+ </update>
+ 
+ <select id="selectData" parameterType="java.lang.Integer" resultType="kr.co.spd.user.dto.UserDTO" >
+ 	SELECT * FROM TB_USER WHERE USER_ID = #{userId}
+ </select>
+ 
+ <delete id="deleteData" parameterType="java.lang.Integer" >
+  DELETE FROM TB_USER WHERE USER_ID = #{userId}
+ </delete>
+ 
+ <select id="selectDataByLgnId" parameterType="java.lang.String" resultType="kr.co.spd.user.dto.UserDTO">
+ 	SELECT * FROM TB_USER WHERE LGN_ID = #{lgnId}
+ </select>
+ 
+ <select id="selectDataByEmail" parameterType="java.lang.String" resultType="kr.co.spd.user.dto.UserDTO">
+ 	SELECT * FROM TB_USER WHERE EMAIL = #{email}
+ </select>
+ 
+ <update id="rePW" parameterType="kr.co.spd.user.dto.UserDTO">
+   UPDATE TB_USER
+   SET LGN_PW = #{lgnPw}
+ 	 WHERE LGN_ID = #{lgnId}
+ </update>
+ 
+</mapper>

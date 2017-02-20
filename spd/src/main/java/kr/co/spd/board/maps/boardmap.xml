@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="BoardMap">
+ 
+ <insert id="insertData" parameterType="kr.co.spd.board.dto.BoardMapDTO">
+	<selectKey order="BEFORE" keyProperty="mapId" resultType="java.lang.Integer">
+ 		SELECT SEQ_BOARD_MAP.NEXTVAL FROM DUAL
+ 	</selectKey>
+	INSERT INTO TB_BOARD_MAP(
+  	MAP_ID, PAR_MAP_ID, MAP_NM, REG_DT, MAP_ORDER, DELETE_YN, MEMO_YN
+  ) VALUES (
+  	#{mapId}, #{parMapId}, #{mapNm}, SYSDATE, #{mapOrder}, #{deleteYn}, #{memoYn}
+  )
+ </insert>
+ 
+ <update id="updateData" parameterType="kr.co.spd.board.dto.BoardMapDTO">
+   UPDATE TB_BOARD_MAP
+   SET MAP_NM = #{mapNm}
+ 		 , MAP_ORDER = #{mapOrder}
+ 		 , DELETE_YN = #{deleteYn}
+ 		 , MEMO_YN = #{memoYn}
+ 	 WHERE MAP_ID = #{mapId}
+ </update>
+ 
+ <select id="selectData" parameterType="java.lang.Integer" resultType="kr.co.spd.board.dto.BoardMapDTO" >
+ 	SELECT * FROM TB_BOARD_MAP WHERE MAP_ID = #{mapId}
+ </select>
+ 
+ <delete id="deleteData" parameterType="java.lang.Integer" >
+  DELETE FROM TB_BOARD_MAP WHERE MAP_ID = #{mapId}
+ </delete>
+ 
+ <select id="selectList" resultType="kr.co.spd.board.dto.BoardMapDTO" >
+ 	SELECT * FROM TB_BOARD_MAP
+ </select>
+
+</mapper>
